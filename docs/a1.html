@@ -11,78 +11,78 @@
   <body>
     <h1>Jack Strickland's Assignment 1: Blink!</h1>
     <div class="header">
-      <img src="red-panda.jpg" />
-      <p>Prompt: Create a circuit with 3 or more LED's where each can blink independently.
+      <img src="IMG_5090.GIF" />
+      <p>Prompt: Create a circuit with 3 or more LED's where each can blink independently.</p>
 
-        Firmware: 
-        // Arduino code for blinking 3 LEDs independently in a sequence
-// Define the Arduino digital pin connected to the first red LED
-int redLED1 = 8;
+        <p>Firmware: <br>
+        // Arduino code for blinking 3 LEDs independently in a sequence<br>
+// Define the Arduino digital pin connected to the first red LED<br>
+int redLED1 = 8;<br>
 
-// Define the Arduino digital pin connected to the white LED
-int whiteLED = 10;
+// Define the Arduino digital pin connected to the white LED<br>
+int whiteLED = 10;<br>
 
-// Define the Arduino digital pin connected to the second red LED
-int redLED2 = 12;
+// Define the Arduino digital pin connected to the second red LED<br>
+int redLED2 = 12;<br>
 
-// The setup function runs when the program initiates
-void setup() {
+// The setup function runs when the program initiates<br>
+void setup() {<br>
 
-  // Configure the first red LED pin as an OUTPUT
-  pinMode(redLED1, OUTPUT);
+  // Configure the first red LED pin as an OUTPUT<br>
+  pinMode(redLED1, OUTPUT);<br>
 
-  // Configure the white LED pin as an OUTPUT
-  pinMode(whiteLED, OUTPUT);
+  // Configure the white LED pin as an OUTPUT<br>
+  pinMode(whiteLED, OUTPUT);<br>
 
-  // Configure the second red LED pin as an OUTPUT
-  pinMode(redLED2, OUTPUT);
-}
+  // Configure the second red LED pin as an OUTPUT<br>
+  pinMode(redLED2, OUTPUT);<br>
+}<br>
 
-//The loop function will run repeatedly indefinitely 
-void loop() {
+//The loop function will run repeatedly indefinitely <br>
+void loop() {<br>
 
-  // Turn ON the first red LED
-  digitalWrite(redLED1, HIGH);
-  // LED stays on for 500 ms
+  // Turn ON the first red LED<br>
+  digitalWrite(redLED1, HIGH);<br>
+  // LED stays on for 500 ms<br>
+  delay(500);<br>
+  // Turn LED off and move to next one<br>
+  digitalWrite(redLED1, LOW);<br>
+
+  // Turn ON the white LED<br>
+  digitalWrite(whiteLED, HIGH);<br>
+  // LED stays on for 500 ms<br>
+  delay(500);<br>
+  // Turn LED off and move to next one<br>
+  digitalWrite(whiteLED, LOW);<br>
+
+  // Turn ON the second red LED<br>
+  digitalWrite(redLED2, HIGH);<br>
+  // LED stays on for 500 ms<br>
+  delay(500);<br>
+  // Turn LED off and move to next one<br>
+  digitalWrite(redLED2, LOW);<br>
+
+  // Pause before repeating the sequence<br>
   delay(500);
-  // Turn LED off and move to next one
-  digitalWrite(redLED1, LOW);
+}</p>
 
-  // Turn ON the white LED
-  digitalWrite(whiteLED, HIGH);
-  // LED stays on for 500 ms
-  delay(500);
-  // Turn LED off and move to next one
-  digitalWrite(whiteLED, LOW);
+<p>Schematic & Circuit:<br>
+<img src="Schematic.JPG" /><br>
+Including the formulas used to calculate the correct resistors per LED<br>
+<img src="circuit.JPEG" /></p>
 
-  // Turn ON the second red LED
-  digitalWrite(redLED2, HIGH);
-  // LED stays on for 500 ms
-  delay(500);
-  // Turn LED off and move to next one
-  digitalWrite(redLED2, LOW);
+<p>Functioning circuit:<br>
+<img src="IMG_5090.GIF" /></p>
 
-  // Pause before repeating the sequence
-  delay(500);
-}
-
-Schematic & Circuit:
-<img src="Schematic.JPG" />
-Including the formulas used to calculate the correct resistors per LED
-<img src="circuit.JPEG" />
-
-Functioning circuit:
-<img src="IMG_5090.GIF" />
-
-Additional Questions:
+<p>Additional Questions:<br>
 1: Draw a graph where the X axis is time and the Y axis is voltage across the LEDs. Draw a line for each of your 3 LEDs.
-<img src="graph.JPG" />
-2: How many LEDs could you blink independently with your Arduino? How much current would that draw?
-14 digital pins x 10 mA, requires 140 mA
-3: How fast do you need to blink your LEDs until you no longer can tell that they are blinking?
-T = 1/60 = 16.7 ms
-4: Did you use AI tools in completing this assignment?
-I used generative AI in further understanding how to implement "digitalWrite" and choosing the correct pins.
+<img src="graph.JPG" /><br>
+2: How many LEDs could you blink independently with your Arduino? How much current would that draw?<br>
+14 digital pins x 10 mA, requires 140 mA<br>
+3: How fast do you need to blink your LEDs until you no longer can tell that they are blinking?<br>
+T = 1/60 = 16.7 ms<br>
+4: Did you use AI tools in completing this assignment?<br>
+I used generative AI in further understanding how to implement "digitalWrite" and choosing the correct pins.<br>
 
       </p>
     </div>
