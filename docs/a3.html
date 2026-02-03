@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, maximum-scale=1.0" />
+
+    <title>Example Student's HCDE 439 Physical Computing Page!</title>
+
+    <link href="style.css" rel="stylesheet" type="text/css" />
+  </head>
+  <body>
+    <h1>Jack Strickland's Assignment 3: Input Output!</h1>
+    <div class="header">
+      <img src="A3Gif.GIF" />
+      <p>
+        // Store the analog pin used to read the voltage divider output
+const int sensorPin = A0;<br>
+
+// Store the pin for the red indicator LED
+const int redLedPin = 8;<br>
+
+// Store the pin for the yellow indicator LED
+const int yellowLedPin = 9;<br>
+
+// Store the pin for the green LED that will fade using PWM
+const int greenPwmLedPin = 10;<br>
+
+// Store the reading from analogRead (0 to 1023)
+int sensorValue = 0;<br>
+
+// Store the mapped PWM value (0 to 255) for analogWrite
+int pwmValue = 0;<br>
+
+// Store the lower bound of the expected sensor reading in dark
+const int darkReading = 90;<br>
+
+// Store the upper bound of the expected sensor reading in bright
+const int brightReading = 930;<br>
+
+void setup() {<br>
+
+  // Start serial communication so we can print custom debug messages
+  Serial.begin(9600);<br>
+
+  // Configure the red LED pin as an output
+  pinMode(redLedPin, OUTPUT);<br>
+
+  // Configure the yellow LED pin as an output
+  pinMode(yellowLedPin, OUTPUT);<br>
+
+  // Configure the green PWM LED pin as an output
+  pinMode(greenPwmLedPin, OUTPUT);
+} <br>
+
+void loop() {<br>
+
+  // Read the voltage divider output at A0 as a number from 0 to 1023
+  sensorValue = analogRead(sensorPin);<br>
+
+  // Convert the sensor reading into a PWM value (0 to 255) for LED brightness
+  pwmValue = map(sensorValue, darkReading, brightReading, 0, 255);<br>
+
+  // Clamp the PWM value so it never goes below 0 or above 255
+  pwmValue = constrain(pwmValue, 0, 255);<br>
+
+  // Set the green LED brightness using PWM so brightness changes with light level
+  analogWrite(greenPwmLedPin, pwmValue);<br>
+
+  // Turn off the red LED by default before using the if-statement logic
+  digitalWrite(redLedPin, LOW);<br>
+
+  // Turn off the yellow LED by default before using the if-statement logic
+  digitalWrite(yellowLedPin, LOW);<br>
+
+  // If it is very dark (low ADC value), turn on the red LED as a warning
+  if (sensorValue < 250) {<br>
+
+    // Turn on the red LED to indicate the "dark" state
+    digitalWrite(redLedPin, HIGH);<br>
+
+    // Print a custom message describing the current state and readings
+    Serial.print("Room state: DARK | raw=");<br>
+
+    // Print the raw sensor value to the serial monitor
+    Serial.print(sensorValue);<br>
+
+    // Print the PWM value that is being sent to the green LED
+    Serial.print(" | pwm=");<br>
+
+    // Print the PWM value as the final brightness command
+    Serial.println(pwmValue);
+  }<br>
+
+  // Otherwise if it is medium light, turn on the yellow LED
+  else if (sensorValue < 700) {<br>
+
+    // Turn on the yellow LED to indicate the "medium" state
+    digitalWrite(yellowLedPin, HIGH);<br>
+
+    // Print a custom message describing the current state and readings
+    Serial.print("Room state: MEDIUM | raw=");<br>
+
+    // Print the raw sensor value to the serial monitor
+    Serial.print(sensorValue);<br>
+
+    // Print the PWM value that is being sent to the green LED
+    Serial.print(" | pwm=");<br>
+
+    // Print the PWM value as the final brightness command
+    Serial.println(pwmValue);
+  }<br>
+
+  // Otherwise it is bright, so keep red/yellow off and let green brightness show the level
+  else {<br>
+
+    // Print a custom message describing the current state and readings
+    Serial.print("Room state: BRIGHT | raw=");<br>
+
+    // Print the raw sensor value to the serial monitor
+    Serial.print(sensorValue);<br>
+
+    // Print the PWM value that is being sent to the green LED
+    Serial.print(" | pwm=");<br>
+
+    // Print the PWM value as the final brightness command
+    Serial.println(pwmValue);
+  }<br>
+
+  // Delay slightly so the serial monitor is readable and values are stable
+  delay(200);
+}
+</p>
+
+<p>Schematic & Circuit:<br>
+<img src="A3_Schematic.jpeg" /><br>
+Including the formulas used to calculate the correct resistors per LED<br>
+<img src="A3Image.jpeg" /><br>
+
+Functioning circuit:<br>
+<img src="A3Gif.GIF" />
+
+Additional Questions:<br>
+1: In your voltage divider, can the variable resistor be either R1 or R2 or does it need to be one or the other? <br>
+The variable resistor in a voltage divider can be used as either R1 or R2, <br>
+but its position determines whether the measured voltage increases or decreases with changes in resistance. <br>
+If the variable resistor is placed on the high side (connected to 5V), the output voltage decreases as its resistance increases;<br>
+if it is placed on the low side (connected to ground), the output voltage increases as its resistance increases.<br>
+2: Draw a graph where the x-axis is time and the y-axis is voltage. <br>
+<img src="A3Graph.jpeg" /><br>
+3: Imagine you had 10-bit PWM and a 16-bit analog-to-digital converter instead. How would this change your map() code? <br>
+If the ADC were 16-bit, analogRead() would return values from 0 to 65535 instead of 0 to 1023, <br>
+and if PWM were 10-bit, analogWrite() would accept values from 0 to 1023 instead of 0 to 255. <br>
+The map() function would be updated to scale the larger input range into the larger output range, but its structure and purpose would remain the same.
+<br>
+      </p>
+    </div>
+  </body>
+</html>
