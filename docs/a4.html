@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, maximum-scale=1.0" />
+
+    <title>Example Student's HCDE 439 Physical Computing Page!</title>
+
+    <link href="style.css" rel="stylesheet" type="text/css" />
+  </head>
+  <body>
+    <h1>Jack Strickland's Assignment 4: Libraries!</h1>
+    <div class="header">
+      <img src="A4Gif.GIF" />
+      <p>
+        // Include the IRremote library so the Arduino can decode IR remote signals<br>
+#include <IRremote.h><br>
+
+// Include the Servo library so the Arduino can generate servo control pulses<br>
+#include <Servo.h><br>
+
+// Store the digital pin used to read the IR receiver output wire<br>
+const int IR_RECEIVE_PIN = 2;<br>
+
+// Store the digital pin used to send the servo signal wire<br>
+const int SERVO_PIN = 9;<br>
+
+// Create a Servo object to can control a servo motor<br>
+Servo myServo;<br>
+
+// Store the servo angle for the "min" position<br>
+const int ANGLE_MIN = 0;<br>
+
+// Store the servo angle for the "middle" position<br>
+const int ANGLE_MID = 90;<br>
+
+// Store the servo angle for the "max" position<br>
+const int ANGLE_MAX = 180;<br>
+
+// Store the IR code for the first remote button<br>
+unsigned long CODE_MIN = 0xE916FF00;<br>
+
+// Store the IR code for the second remote button<br>
+unsigned long CODE_MID = 0xF30CFF00;<br>
+
+// Store the IR code for the third remote button<br>
+unsigned long CODE_MAX = 0xE718FF00;<br>
+
+void setup() {<br>
+
+  // Start serial communication to print custom messages and debug values<br>
+  Serial.begin(9600);<br>
+
+  // Begin listening for IR signals on the IR receiver pin<br>
+  IrReceiver.begin(IR_RECEIVE_PIN, ENABLE_LED_FEEDBACK);<br>
+
+  // Attach the servo object to the servo signal pin<br>
+  myServo.attach(SERVO_PIN);<br>
+
+  // Move the servo to a known starting position<br>
+  myServo.write(ANGLE_MID);<br>
+
+  // Print an instruction so the user knows what to do first<br>
+  Serial.println("IR+Servo demo: Press your remote buttons and watch the servo.");<br>
+}<br>
+
+void loop() {<br>
+
+  // Check if a complete IR signal has been received and decoded<br>
+  if (IrReceiver.decode()) {<br>
+
+    // Read the decoded IR value from the IRremote library data structure<br>
+    unsigned long code = IrReceiver.decodedIRData.decodedRawData;<br>
+
+    // Print a custom message label before the raw code<br>
+    Serial.print("IR code received: 0x");<br>
+
+    // Print the raw code in hexadecimal so it is easy to copy into constants<br>
+    Serial.println(code, HEX);<br>
+
+    // If the received code matches the "min" button code, move servo to 0 degrees<br>
+    if (code == CODE_MIN) {<br>
+
+      // Command the servo to rotate to the minimum angle<br>
+      myServo.write(ANGLE_MIN);<br>
+
+      // Print a custom message confirming the action taken<br>
+      Serial.println("Action: Servo moved to MIN (0 degrees).");<br>
+    }<br>
+
+    // Otherwise if the received code matches the "mid" button code, move servo to 90 degrees<br>
+    else if (code == CODE_MID) {<br>
+
+      // Command the servo to rotate to the middle angle<br>
+      myServo.write(ANGLE_MID);<br>
+
+      // Print a custom message confirming the action taken<br>
+      Serial.println("Action: Servo moved to MID (90 degrees).");<br>
+    }<br>
+
+    // Otherwise if the received code matches the "max" button code, move servo to 180 degrees<br>
+    else if (code == CODE_MAX) {<br>
+
+      // Command the servo to rotate to the maximum angle<br>
+      myServo.write(ANGLE_MAX);<br>
+
+      // Print a custom message confirming the action taken<br>
+      Serial.println("Action: Servo moved to MAX (180 degrees).");<br>
+    }<br>
+
+    // Otherwise, the button pressed is not one of the three mapped controls<br>
+    else {<br>
+
+      // Print a custom message explaining no mapped action occurred<br>
+      Serial.println("Action: No servo move mapped to that button.");<br>
+    }<br>
+
+    // Add a short delay so repeated signals do not cause rapid jittery movement<br>
+    delay(200);<br>
+
+    // Tell the IR library we are ready to receive the next IR message<br>
+    IrReceiver.resume();<br>
+  }<br>
+}
+
+</p>
+
+<p>Schematic & Circuit:<br>
+<img src="A4Schematic.jpeg" /><br>
+Including the formulas used to calculate the correct resistors per LED<br>
+<img src="A4Image.jpeg" /><br>
+
+Functioning circuit:<br>
+<img src="A4Gif.gif" />
+
+Additional Questions:<br>
+1: Say you are using a servo motor you attach to pin 9. In your loop() you have the following code:<br>
+
+void loop() {<br>
+for (pos = 0; pos <= 180; pos += 1) {<br>
+  myservo.write(pos); <br>
+  delay(100); <br>
+  }<br>
+}<br>
+Draw a graph with the x-axis as time and the y-axis as voltage at pin 9 with respect to ground.<br>
+<img src="A4Graph.jpeg"
+
+2: Your input device is slightly broken, leading it to give us an erroneous reading 1% of the time. How can we address this? Answer in (pseudo)code.<br>
+vals = []<br>
+for i in 1..9:<br>
+  vals.append(readSensor())<br>
+sort(vals)<br>
+clean = vals[4]<br>       
+// median of 9 rejects rare bad spikes<br>
+return clean<br>
+
+
+3: Your input device is slightly noisy, leading the measurement to randomly deviate from the true measurement up or down by 10%.<br>
+How can we address this? Answer in (pseudo)code.<br>
+sum = 0 <br>
+for i in 1..20:<br>
+  sum += readSensor()<br>
+avg = sum / 20<br>
+return avg<br>
+
+
+4: Did you use AI tools in completing this assignment?<br>
+I used AI tools to assist in implementing the Servo code and <br>
+conceptual clarification with downloading libraries.
+      </p>
+    </div>
+  </body>
+</html>
