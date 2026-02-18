@@ -157,7 +157,7 @@ void loop() {<br>
 </p>
 
 <p>Schematic & Circuit:<br>
-<img src="A4Schematic.jpeg" /><br>
+<img src="A5Schematic.jpeg" /><br>
 
 <img src="A5Image.jpeg" /><br>
 
@@ -169,9 +169,32 @@ Additional Questions:<br>
 
 2: Draw a schematic for a circuit with using at least your arduino, a DC motor, a flyback diode, and capacitors between power and ground. 
 Find parts with datasheets you could use for each of these schematic components.
+<img src="A5Qst2.jpeg" />
 
 3: Draw a schematic using at least your arduino, this chip, and two motors. 
 Write (pseudo) code that shows how you would move the motors both forward, both back, then one forward one back, and one back then forward.
+<img src="A5Qst3.jpeg" /><br>
+set ENA HIGH; set ENB HIGH; <br>
+
+// both forward<br>
+A_IN1=HIGH; A_IN2=LOW;
+B_IN1=HIGH; B_IN2=LOW;
+delay(t);<br>
+
+// both back<br>
+A_IN1=LOW;  A_IN2=HIGH;
+B_IN1=LOW;  B_IN2=HIGH;
+delay(t);<br>
+
+// one forward one back (A forward, B back)<br>
+A_IN1=HIGH; A_IN2=LOW;
+B_IN1=LOW;  B_IN2=HIGH;
+delay(t);<br>
+
+// one back then forward (A back, B forward)<br>
+A_IN1=LOW;  A_IN2=HIGH;
+B_IN1=HIGH; B_IN2=LOW;
+delay(t);<br>
 
 4: Did you use AI tools in completing this assignment?<br>
 I used AI tools to assist in implementing the mosfet code, ensuring that I safely and <br>
