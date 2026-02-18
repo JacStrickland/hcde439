@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, maximum-scale=1.0" />
+
+    <title>Example Student's HCDE 439 Physical Computing Page!</title>
+
+    <link href="style.css" rel="stylesheet" type="text/css" />
+  </head>
+  <body>
+    <h1>Jack Strickland's Assignment 5: High Voltage/Transistors!</h1>
+    <div class="header">
+      <p>
+        // Include the IRremote library so we can decode IR remote signals<br>
+#include <IRremote.h><br>
+
+// Store the pin number used by the IR receiver signal output (Y pin)<br>
+const int IR_RECEIVE_PIN = 2;<br>
+
+// Store the PWM pin number used to drive the MOSFET gate (controls motor power)<br>
+const int MOSFET_GATE_PIN = 9;<br>
+
+// Store the current PWM output value (0 = off, 255 = full power)<br>
+int pwmValue = 0;<br>
+
+// Store the amount to change PWM each button press<br>
+const int pwmStep = 25;<br>
+
+// Store an example IR code for "increase speed" <br>
+unsigned long CODE_UP = 0xE718FF00;<br>
+
+// Store an example IR code for "decrease speed"<br>
+unsigned long CODE_DOWN = 0xF30CFF00;<br>
+
+// Store an example IR code for "toggle on/off" <br>
+unsigned long CODE_TOGGLE = 0xE916FF00;<br>
+
+// Store whether the motor is enabled or disabled<br>
+bool motorEnabled = false;<br>
+
+void setup() {<br>
+
+  // Start serial communication to display custom messages and IR codes<br>
+  Serial.begin(9600);<br>
+
+  // Initialize the IR receiver so it can decode signals on the chosen pin<br>
+  IrReceiver.begin(IR_RECEIVE_PIN, ENABLE_LED_FEEDBACK);<br>
+
+  // Configure the MOSFET gate pin as an OUTPUT so it actively drives HIGH/LOW instead of floating<br>
+  pinMode(MOSFET_GATE_PIN, OUTPUT);<br>
+
+  // Set the gate pin LOW at startup so the MOSFET is OFF and the motor starts off safely<br>
+  digitalWrite(MOSFET_GATE_PIN, LOW);<br>
+
+  // Print startup instructions using a message different from the example code<br>
+  Serial.println("Motor PWM control ready: press remote buttons to change speed.");<br>
+}<br>
+
+void loop() {<br>
+
+  // Check if an IR message has been received and decoded by the library<br>
+  if (IrReceiver.decode()) {<br>
+
+    // Read the decoded raw IR code from the IRremote data structure<br>
+    unsigned long code = IrReceiver.decodedIRData.decodedRawData;<br>
+
+    // Print the received IR code so we can copy it into our CODE constants<br>
+    Serial.print("IR code: 0x");<br>
+
+    // Print the code in hexadecimal format for easy copy/paste<br>
+    Serial.println(code, HEX);<br>
+
+    // If the toggle button is pressed, flip between motor enabled and disabled<br>
+    if (code == CODE_TOGGLE) {<br>
+
+      // Toggle the motor enabled state variable<br>
+      motorEnabled = !motorEnabled;<br>
+
+      // If the motor is being turned off, set PWM to zero immediately<br>
+      if (!motorEnabled) {<br>
+
+        // Set PWM output to 0 so the MOSFET turns off and the motor stops<br>
+        pwmValue = 0;<br>
+
+        // Write PWM 0 to the gate pin so motor power is removed<br>
+        analogWrite(MOSFET_GATE_PIN, pwmValue);<br>
+
+        // Print confirmation message to serial monitor<br>
+        Serial.println("Motor state: OFF");<br>
+      }<br>
+      else {<br>
+
+        // If turning on, start at a moderate speed so it visibly moves<br>
+        pwmValue = 120;<br>
+
+        // Write the starting PWM value to the MOSFET gate pin<br>
+        analogWrite(MOSFET_GATE_PIN, pwmValue);<br>
+
+        // Print confirmation message to serial monitor<br>
+        Serial.println("Motor state: ON (starting at medium speed)");<br>
+      }<br>
+    }<br>
+
+    // If the increase-speed button is pressed and motor is enabled, increase PWM<br>
+    else if (code == CODE_UP && motorEnabled) {<br>
+
+      // Increase PWM by a fixed step<br>
+      pwmValue = pwmValue + pwmStep;<br>
+
+      // Clamp PWM so it never exceeds 255 (maximum 8-bit PWM)<br>
+      pwmValue = constrain(pwmValue, 0, 255);<br>
+
+      // Output the new PWM value to the MOSFET gate to increase motor power<br>
+      analogWrite(MOSFET_GATE_PIN, pwmValue);<br>
+
+      // Print a custom speed message showing the new PWM value<br>
+      Serial.print("Motor speed increased | pwm=");<br>
+
+      // Print the current PWM value<br>
+      Serial.println(pwmValue);<br>
+    }
+<br>
+    // If the decrease-speed button is pressed and motor is enabled, decrease PWM<br>
+    else if (code == CODE_DOWN && motorEnabled) {<br>
+
+      // Decrease PWM by a fixed step<br>
+      pwmValue = pwmValue - pwmStep;
+<br>
+      // Clamp PWM so it never goes below 0<br>
+      pwmValue = constrain(pwmValue, 0, 255);<br>
+
+      // Output the new PWM value to the MOSFET gate to decrease motor power<br>
+      analogWrite(MOSFET_GATE_PIN, pwmValue);<br>
+
+      // Print a custom speed message showing the new PWM value<br>
+      Serial.print("Motor speed decreased | pwm=");<br>
+
+      // Print the current PWM value<br>
+      Serial.println(pwmValue);<br>
+    }<br>
+
+    // If some other button is pressed, report it but do not change motor behavior<br>
+    else {<br>
+
+      // Print a message indicating no mapped action occurred<br>
+      Serial.println("No action mapped to that button (or motor is OFF).");<br>
+    }<br>
+
+    // Add a short delay so repeated IR signals do not cause rapid jitter<br>
+    delay(200);<br>
+
+    // Resume IR receiver decoding for the next message<br>
+    IrReceiver.resume();<br>
+  }
+}
+</p>
+
+<p>Schematic & Circuit:<br>
+<img src="A4Schematic.jpeg" /><br>
+
+<img src="A5Image.jpeg" /><br>
+
+Functioning circuit:<br>
+<img src="A5Gif.gif" />
+
+Additional Questions:<br>
+1: For your mosfet, what is the absolute maximum amount of current between pins 2 and 3? IRLZ44N - 47 A
+
+2: Draw a schematic for a circuit with using at least your arduino, a DC motor, a flyback diode, and capacitors between power and ground. 
+Find parts with datasheets you could use for each of these schematic components.
+
+3: Draw a schematic using at least your arduino, this chip, and two motors. 
+Write (pseudo) code that shows how you would move the motors both forward, both back, then one forward one back, and one back then forward.
+
+4: Did you use AI tools in completing this assignment?<br>
+I used AI tools to assist in implementing the mosfet code, ensuring that I safely and <br>
+efficiently add an external power source, and <br>
+conceptual clarification with downloading libraries.
+      </p>
+    </div>
+  </body>
+</html>
