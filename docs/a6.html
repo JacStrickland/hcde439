@@ -10,300 +10,302 @@
     <h1>Jack Strickland's Assignment 6: Talking to the Web!</h1>
     <div class="header">
       <p>
-        // Use the built-in serial port over USB
-// (WebSerial reads/writes this Serial connection)
+        // Use the built-in serial port over USB<br>
+// (WebSerial reads/writes this Serial connection)<br>
 
-// Store the joystick X analog pin
-const int joyXPin = A0;
+// Store the joystick X analog pin<br>
+const int joyXPin = A0;<br>
 
-// Store the joystick Y analog pin
-const int joyYPin = A1;
+// Store the joystick Y analog pin<br>
+const int joyYPin = A1;<br>
 
-// Store the joystick button pin (digital)
-const int joyBtnPin = 2;
+// Store the joystick button pin (digital)<br>
+const int joyBtnPin = 2;<br>
 
-// Store the PWM LED output pin
-const int ledPin = 9;
+// Store the PWM LED output pin<br>
+const int ledPin = 9;<br>
 
-// Store the raw joystick readings
-int joyX = 0;
-int joyY = 0;
+// Store the raw joystick readings<br>
+int joyX = 0;<br>
+int joyY = 0;<br>
 
-// Store the joystick button state
-int joyBtn = 0;
+// Store the joystick button state<br>
+int joyBtn = 0;<br>
 
-// Store the current LED brightness (0–255)
-int ledBrightness = 0;
+// Store the current LED brightness (0–255)<br>
+int ledBrightness = 0;<br>
 
-// Store whether the LED is enabled
-bool ledEnabled = true;
+// Store whether the LED is enabled<br>
+bool ledEnabled = true;<br>
 
-void setup() {
+void setup() {<br>
 
-  // Start serial communication at 9600 baud
-  Serial.begin(9600);
+  // Start serial communication at 9600 baud<br>
+  Serial.begin(9600);<br>
 
-  // Set joystick button pin as input with internal pullup (stable reading)
-  pinMode(joyBtnPin, INPUT_PULLUP);
+  // Set joystick button pin as input with internal pullup (stable reading)<br>
+  pinMode(joyBtnPin, INPUT_PULLUP);<br>
 
-  // Set LED pin as output so Arduino drives it (not floating)
-  pinMode(ledPin, OUTPUT);
+  // Set LED pin as output so Arduino drives it (not floating)<br>
+  pinMode(ledPin, OUTPUT);<br>
 
-  // Start with LED off (safe default)
-  analogWrite(ledPin, 0);
-}
+  // Start with LED off (safe default)<br>
+  analogWrite(ledPin, 0);<br>
+}<br>
 
-void loop() {
+void loop() {<br>
 
-  // Read joystick X (0–1023)
-  joyX = analogRead(joyXPin);
+  // Read joystick X (0–1023)<br>
+  joyX = analogRead(joyXPin);<br>
 
-  // Read joystick Y (0–1023)
-  joyY = analogRead(joyYPin);
+  // Read joystick Y (0–1023)<br>
+  joyY = analogRead(joyYPin);<br>
 
-  // Read button (pressed = LOW because of INPUT_PULLUP)
-  joyBtn = digitalRead(joyBtnPin);
+  // Read button (pressed = LOW because of INPUT_PULLUP)<br>
+  joyBtn = digitalRead(joyBtnPin);<br>
 
-  // Print X value
-  Serial.print(joyX);
+  // Print X value<br>
+  Serial.print(joyX);<br>
 
-  // Print comma separator
-  Serial.print(",");
+  // Print comma separator<br>
+  Serial.print(",");<br>
 
-  // Print Y value
-  Serial.print(joyY);
+  // Print Y value<br>
+  Serial.print(joyY);<br>
 
-  // Print comma separator
-  Serial.print(",");
+  // Print comma separator<br>
+  Serial.print(",");<br>
 
-  // Print button as 1 when pressed, 0 when not pressed
-  Serial.println(joyBtn == LOW ? 1 : 0);
+  // Print button as 1 when pressed, 0 when not pressed<br>
+  Serial.println(joyBtn == LOW ? 1 : 0);<br>
 
-  // If serial data is available from the webpage, read it
-  if (Serial.available() > 0) {
+  // If serial data is available from the webpage, read it<br>
+  if (Serial.available() > 0) {<br>
 
-    // Read a full command line up to newline
-    String cmd = Serial.readStringUntil('\n');
+    // Read a full command line up to newline<br>
+    String cmd = Serial.readStringUntil('\n');<br>
 
-    // Remove extra whitespace
-    cmd.trim();
+    // Remove extra whitespace<br>
+    cmd.trim();<br>
 
-    // If command starts with "B," it sets brightness
-    if (cmd.startsWith("B,")) {
+    // If command starts with "B," it sets brightness<br>
+    if (cmd.startsWith("B,")) {<br>
 
-      // Extract substring after "B,"
-      String valStr = cmd.substring(2);
+      // Extract substring after "B,"<br>
+      String valStr = cmd.substring(2);<br>
 
-      // Convert to integer
-      int val = valStr.toInt();
+      // Convert to integer<br>
+      int val = valStr.toInt();<br>
 
-      // Clamp to 0–255
-      val = constrain(val, 0, 255);
+      // Clamp to 0–255<br>
+      val = constrain(val, 0, 255);<br>
 
-      // Store brightness
-      ledBrightness = val;
-    }
+      // Store brightness<br>
+      ledBrightness = val;<br>
+    }<br>
 
-    // If command is "T" toggle LED enable
-    else if (cmd == "T") {
+    // If command is "T" toggle LED enable<br>
+    else if (cmd == "T") {<br>
 
-      // Flip LED enabled state
-      ledEnabled = !ledEnabled;
-    }
-  }
+      // Flip LED enabled state<br>
+      ledEnabled = !ledEnabled;<br>
+    }<br>
+  }<br>
 
-  // If LED is enabled, output brightness; otherwise force off
-  analogWrite(ledPin, ledEnabled ? ledBrightness : 0);
+  // If LED is enabled, output brightness; otherwise force off<br>
+  analogWrite(ledPin, ledEnabled ? ledBrightness : 0);<br>
 
-  // Small delay so serial is readable and stable
-  delay(20);
+  // Small delay so serial is readable and stable<br>
+  delay(20);<br>
 }
 </p>
 
 <p>Sketch.js code:<br>
-  // Store the serial port object
-let port;
+  // Store the serial port object<br>
+let port;<br>
 
-// Store the reader object
-let reader;
+// Store the reader object<br>
+let reader;<br>
 
-// Store the writer object
-let writer;
+// Store the writer object<br>
+let writer;<br>
 
-// Store latest joystick values from Arduino
-let joyX = 512;
-let joyY = 512;
-let joyBtn = 0;
+// Store latest joystick values from Arduino<br>
+let joyX = 512;<br>
+let joyY = 512;<br>
+let joyBtn = 0;<br>
 
-// Store background toggle state controlled by joystick button
-let bgOn = false;
+// Store background toggle state controlled by joystick button<br>
+let bgOn = false;<br>
 
-// Store whether we are connected
-let connected = false;
+// Store whether we are connected<br>
+let connected = false;<br>
 
-// p5 setup runs once
-function setup() {
-  // Create a canvas for our interactive visualization
-  createCanvas(600, 400);
+// p5 setup runs once<br>
+function setup() {<br>
+  // Create a canvas for our interactive visualization<br>
+  createCanvas(600, 400);<br>
 
-  // Set text size for UI messages
-  textSize(16);
+  // Set text size for UI messages<br>
+  textSize(16);<br>
 
-  // Create a connect button
-  const btn = createButton("Connect to Arduino");
+  // Create a connect button<br>
+  const btn = createButton("Connect to Arduino");<br>
 
-  // Position the button
-  btn.position(10, 10);
+  // Position the button<br>
+  btn.position(10, 10);<br>
 
-  // When button clicked, connect via WebSerial
-  btn.mousePressed(connectSerial);
-}
+  // When button clicked, connect via WebSerial<br>
+  btn.mousePressed(connectSerial);<br>
+}<br>
 
-// p5 draw runs repeatedly
-function draw() {
-  // Draw background based on joystick button toggle
-  background(bgOn ? 30 : 240);
+// p5 draw runs repeatedly<br>
+function draw() {<br>
+  // Draw background based on joystick button toggle<br>
+  background(bgOn ? 30 : 240);<br>
 
-  // Map joystick X from 0–1023 to canvas width
-  const x = map(joyX, 0, 1023, 0, width);
+  // Map joystick X from 0–1023 to canvas width<br>
+  const x = map(joyX, 0, 1023, 0, width);<br>
 
-  // Map joystick Y from 0–1023 to canvas height
-  const y = map(joyY, 0, 1023, 0, height);
+  // Map joystick Y from 0–1023 to canvas height<br>
+  const y = map(joyY, 0, 1023, 0, height);<br>
 
-  // Draw a circle controlled by the joystick position
-  ellipse(x, y, 50, 50);
+  // Draw a circle controlled by the joystick position<br>
+  ellipse(x, y, 50, 50);<br>
 
-  // Display connection status
-  fill(bgOn ? 255 : 0);
-  text(connected ? "Connected" : "Not connected", 10, 60);
+  // Display connection status<br>
+  fill(bgOn ? 255 : 0);<br>
+  text(connected ? "Connected" : "Not connected", 10, 60);<br>
 
-  // If connected, send LED brightness based on mouseX
-  if (connected) {
-    // Map mouseX to PWM brightness 0–255
-    const brightness = int(map(constrain(mouseX, 0, width), 0, width, 0, 255));
+  // If connected, send LED brightness based on mouseX<br>
+  if (connected) {<br>
+    // Map mouseX to PWM brightness 0–255<br>
+    const brightness = int(map(constrain(mouseX, 0, width), 0, width, 0, 255));<br>
 
-    // Send brightness command to Arduino
-    sendLine(`B,${brightness}`);
-  }
-}
+    // Send brightness command to Arduino<br>
+    sendLine(`B,${brightness}`);<br>
+  }<br>
+}<br>
 
-// Connect to WebSerial and start reading
-async function connectSerial() {
-  // Request the user to pick a serial port
-  port = await navigator.serial.requestPort();
+// Connect to WebSerial and start reading<br>
+async function connectSerial() {<br>
+  // Request the user to pick a serial port<br>
+  port = await navigator.serial.requestPort();<br>
 
-  // Open the port at the same baud rate as Arduino
-  await port.open({ baudRate: 9600 });
+  // Open the port at the same baud rate as Arduino<br>
+  await port.open({ baudRate: 9600 });<br>
 
-  // Create a text decoder for incoming bytes
-  const decoder = new TextDecoderStream();
+  // Create a text decoder for incoming bytes<br>
+  const decoder = new TextDecoderStream();<br>
 
-  // Pipe the port's readable stream into the decoder
-  port.readable.pipeTo(decoder.writable);
+  // Pipe the port's readable stream into the decoder<br>
+  port.readable.pipeTo(decoder.writable);<br>
 
-  // Get a readable stream of decoded text
-  const inputStream = decoder.readable;
+  // Get a readable stream of decoded text<br>
+  const inputStream = decoder.readable;<br>
 
-  // Create a reader to read lines
-  reader = inputStream.getReader();
+  // Create a reader to read lines<br>
+  reader = inputStream.getReader();<br>
 
-  // Create a text encoder for outgoing text
-  const encoder = new TextEncoderStream();
+  // Create a text encoder for outgoing text<br>
+  const encoder = new TextEncoderStream();<br>
 
-  // Pipe the encoder into the port's writable stream
-  encoder.readable.pipeTo(port.writable);
+  // Pipe the encoder into the port's writable stream<br>
+  encoder.readable.pipeTo(port.writable);<br>
 
-  // Get a writer we can write strings to
-  writer = encoder.writable.getWriter();
+  // Get a writer we can write strings to<br>
+  writer = encoder.writable.getWriter();<br>
 
-  // Mark connection state
-  connected = true;
+  // Mark connection state<br>
+  connected = true;<br>
 
-  // Start the read loop
-  readLoop();
-}
+  // Start the read loop<br>
+  readLoop();<br>
+}<br>
 
-// Continuously read serial data and parse CSV
-async function readLoop() {
-  // Store a buffer for partial lines
-  let buffer = "";
+// Continuously read serial data and parse CSV<br>
+async function readLoop() {<br>
+  // Store a buffer for partial lines<br>
+  let buffer = "";<br>
 
-  // Keep reading forever
-  while (true) {
-    // Read a chunk from the serial stream
-    const { value, done } = await reader.read();
+  // Keep reading forever<br>
+  while (true) {<br>
+    // Read a chunk from the serial stream<br>
+    const { value, done } = await reader.read();<br>
 
-    // If the stream ended, stop
-    if (done) break;
+    // If the stream ended, stop<br>
+    if (done) break;<br>
 
-    // Add chunk to buffer
-    buffer += value;
+    // Add chunk to buffer<br>
+    buffer += value;<br>
 
-    // Split buffer into lines
-    const lines = buffer.split("\n");
+    // Split buffer into lines<br>
+    const lines = buffer.split("\n");<br>
 
-    // Keep last partial line in buffer
-    buffer = lines.pop();
+    // Keep last partial line in buffer<br>
+    buffer = lines.pop();<br>
 
-    // Process each complete line
-    for (const line of lines) {
-      // Trim whitespace
-      const trimmed = line.trim();
+    // Process each complete line<br>
+    for (const line of lines) {<br>
+      // Trim whitespace<br>
+      const trimmed = line.trim();<br>
 
-      // Skip empty lines
-      if (!trimmed) continue;
+      // Skip empty lines<br>
+      if (!trimmed) continue;<br>
 
-      // Parse x,y,btn
-      const parts = trimmed.split(",");
+      // Parse x,y,btn<br>
+      const parts = trimmed.split(",");<br>
 
-      // Only process if we got all three values
-      if (parts.length === 3) {
-        joyX = int(parts[0]);
-        joyY = int(parts[1]);
+      // Only process if we got all three values<br>
+      if (parts.length === 3) {<br>
+        joyX = int(parts[0]);<br>
+        joyY = int(parts[1]);<br>
 
-        // Convert button to 0/1
-        const newBtn = int(parts[2]);
+        // Convert button to 0/1<br>
+        const newBtn = int(parts[2]);<br>
 
-        // If button just became pressed, toggle background
-        if (newBtn === 1 && joyBtn === 0) {
-          bgOn = !bgOn;
-        }
+        // If button just became pressed, toggle background<br>
+        if (newBtn === 1 && joyBtn === 0) {<br>
+          bgOn = !bgOn;<br>
+        }<br>
 
-        // Store last button state
-        joyBtn = newBtn;
-      }
-    }
-  }
-}
+        // Store last button state<br>
+        joyBtn = newBtn;<br>
+      }<br>
+    }<br>
+  }<br>
+}<br>
 
-// Send a newline-terminated command to Arduino
-async function sendLine(msg) {
-  // If we do not have a writer, do nothing
-  if (!writer) return;
+// Send a newline-terminated command to Arduino<br>
+async function sendLine(msg) {<br>
+  // If we do not have a writer, do nothing<br>
+  if (!writer) return;<br>
 
-  // Write the message followed by newline
-  await writer.write(msg + "\n");
-}
+  // Write the message followed by newline<br>
+  await writer.write(msg + "\n");<br>
+}<br>
 
-// When a key is pressed, send commands to Arduino
-function keyPressed() {
-  // If not connected, ignore
-  if (!connected) return;
+// When a key is pressed, send commands to Arduino<br>
+function keyPressed() {<br>
+  // If not connected, ignore<br>
+  if (!connected) return;<br>
 
-  // If spacebar pressed, toggle LED on Arduino
-  if (key === " ") {
-    sendLine("T");
-  }
+  // If spacebar pressed, toggle LED on Arduino<br>
+  if (key === " ") {<br>
+    sendLine("T");<br>
+  }<br>
 }
   </p>
   
 <p>Schematic & Circuit:<br>
-<img src="A5Schematic.jpeg" /><br>
+<img src="A6Schematic.jpeg" /><br>
 
-<img src="A5Image.jpeg" /><br>
+<img src="A6Image.jpeg" /><br>
 
-Functioning circuit:<br>
-<img src="A5Gif.gif" />
+Functioning:<br>
+<img src="A6Gif1.gif" /><br>
+<img src="A6Gif2.gif" /><br>
+<img src="A6Gif3.gif" />
       </p>
     </div>
   </body>
