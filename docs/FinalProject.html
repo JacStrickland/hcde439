@@ -35,8 +35,7 @@
       <li>Micro servo motor</li>
       <li>1 red LED</li>
       <li>1 green LED</li>
-      <li>2 LED resistors (220&Omega; or 330&Omega;)</li>
-      <li>External battery pack</li>
+      <li>2 LED resistors (220&Omega;)</li>
       <li>Breadboard</li>
       <li>Jumper wires</li>
       <li>Prototype box / enclosure materials</li>
@@ -50,17 +49,13 @@
       If a wrong button is entered during the passcode sequence, the sequence resets and the LEDs briefly flash to show an incorrect entry.
     </p>
     <p>
-      In the final version, the servo is powered from an external battery so the system can operate independently from laptop USB power.
+      In the final version, the servo is powered from the laptop battery so the system can operate independently.
       The battery ground is connected to Arduino ground so that the servo control signal has the correct reference voltage.
     </p>
 
     <h2>Schematic</h2>
     <div class="section">
       <img src="FinalSchematic.jpeg" />
-      <p>
-        <strong>Placeholder:</strong> Replace this image with the final schematic.
-        The schematic should label all important connections, including the IR receiver pins, servo signal pin, LED pins, resistors, external battery, and shared ground connection.
-      </p>
     </div>
 
     <h2>Circuit</h2>
@@ -70,7 +65,7 @@
 
     <h2>Firmware</h2>
     <p>
-      The firmware uses the <code>IRremote</code> library to decode infrared input and the <code>Servo</code> library to control the locking mechanism.
+      The firmware uses the IRremote library to decode infrared input and the Servo library to control the locking mechanism.
       The final code checks for a two-button passcode to unlock the box and a separate lock command to relock it.
     </p>
     <pre><code>// Include the IRremote library so the Arduino can decode remote signals
